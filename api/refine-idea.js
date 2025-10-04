@@ -82,20 +82,54 @@ Requirements:
         const data = await response.json();
         const content = data.content[0].text;
 
-        // Extract JSON from the response
+        // Extract JSON from the response - try multiple approaches
+        let idea;
+        
+        // First try: look for JSON object
         const jsonMatch = content.match(/\{[\s\S]*\}/);
-        if (!jsonMatch) {
-            throw new Error('No JSON found in Claude response');
+        if (jsonMatch) {
+            try {
+                idea = JSON.parse(jsonMatch[0]);
+            } catch (e) {
+                console.log('First JSON parse failed, trying alternative extraction');
+            }
         }
-
-        try {
-            const idea = JSON.parse(jsonMatch[0]);
-            res.json(idea);
-        } catch (parseError) {
-            console.error('JSON Parse Error:', parseError);
-            console.error('Raw content:', content);
-            throw new Error('Invalid JSON format in Claude response');
+        
+        // Second try: look for JSON between code blocks
+        if (!idea) {
+            const codeBlockMatch = content.match(/```json\s*(\{[\s\S]*?\})\s*```/);
+            if (codeBlockMatch) {
+                try {
+                    idea = JSON.parse(codeBlockMatch[1]);
+                } catch (e) {
+                    console.log('Code block JSON parse failed');
+                }
+            }
         }
+        
+        // Third try: look for any JSON-like structure
+        if (!idea) {
+            const anyJsonMatch = content.match(/\{[\s\S]*?\}/g);
+            if (anyJsonMatch) {
+                for (const jsonStr of anyJsonMatch) {
+                    try {
+                        idea = JSON.parse(jsonStr);
+                        if (idea && typeof idea === 'object' && idea.name) {
+                            break; // Found valid idea object
+                        }
+                    } catch (e) {
+                        continue;
+                    }
+                }
+            }
+        }
+        
+        if (!idea) {
+            console.error('No valid JSON found in response:', content);
+            throw new Error('No valid JSON found in Claude response');
+        }
+        
+        res.json(idea);
 
     } catch (error) {
         console.error('Error refining idea:', error);

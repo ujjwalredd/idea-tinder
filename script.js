@@ -206,7 +206,7 @@ class IdeaTinder {
     async generateIdeaWithClaude() {
         console.log('🚀 Making API request to generate idea...');
         try {
-            const response = await fetch('https://idea-tinder-i0ekmnfox-ujjwalreddyks-2966s-projects.vercel.app/api/generate-idea', {
+            const response = await fetch('https://idea-tinder.vercel.app/api/generate-idea', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -270,7 +270,7 @@ class IdeaTinder {
     }
 
     async refineIdeaWithClaude(originalIdea) {
-        const response = await fetch('https://idea-tinder-i0ekmnfox-ujjwalreddyks-2966s-projects.vercel.app/api/refine-idea', {
+        const response = await fetch('https://idea-tinder.vercel.app/api/refine-idea', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -455,6 +455,8 @@ class IdeaTinder {
 
     hidePitchDeck() {
         this.ideaCard.classList.remove('hidden');
+        this.ideaCard.classList.remove('swipe-right', 'swipe-left');
+        this.ideaCard.style.transform = '';
         this.miniPitchDeck.classList.add('hidden');
         this.isShowingPitchDeck = false;
     }
