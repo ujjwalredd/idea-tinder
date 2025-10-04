@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "functions": {
+    "api/generate-idea.js": {
+      "maxDuration": 30
+    },
+    "api/refine-idea.js": {
+      "maxDuration": 30
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}

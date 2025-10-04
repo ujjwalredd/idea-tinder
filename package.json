@@ -1,0 +1,19 @@
+{
+  "name": "idea-tinder",
+  "version": "1.0.0",
+  "description": "AI-powered startup idea generator",
+  "main": "index.html",
+  "scripts": {
+    "start": "vercel dev",
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": ["startup", "ideas", "ai", "claude"],
+  "author": "Idea Tinder",
+  "license": "MIT"
+}
